@@ -8,7 +8,7 @@ from django.contrib.auth import get_user_model
 User = get_user_model()
 #token import
 from accounts.utils.email import send_account_confirmation_email
-from django.utils.encoding import force_bytes, force_text
+from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode    
 from accounts.token import account_activation_token
 
