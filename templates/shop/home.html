@@ -3,13 +3,23 @@
     {% block content %}
         <div class="row mt-2">
             <div class="col-lg-3 col-md-3">
-                <h2> Company  </h2>
+                <div class="list-group">
+                    <button type="button" class="list-group-item list-group-item-action active text-center" aria-current="true">
+                      Brand List
+                    </button>
+                    <button type="button" class="list-group-item list-group-item-action">A second item</button>
+                    <button type="button" class="list-group-item list-group-item-action">A third button item</button>
+                    <button type="button" class="list-group-item list-group-item-action">A fourth button item</button>
+                  </div>
             </div>
-            <div class="col-lg-6 col-md-6">
-                <h2> Product  </h2>
-            </div>
-            <div class="col-lg-3 col-md-3">
-                <h2> Invoice  </h2>
+            
+            <div class="col-lg-9 col-md-9">
+                <div class="form-outline mb-4">
+                    <input type="search" class="form-control" id="datatable-search-input">
+                    <label class="form-label" for="datatable-search-input">Search</label>
+                  </div>
+                  <div id="datatable">
+                  </div>
             </div>
         </div>
 
