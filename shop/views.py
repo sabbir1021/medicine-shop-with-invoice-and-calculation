@@ -12,17 +12,24 @@ class HomeView(View):
         brands = Brand.objects.all()
         generics = Generic.objects.all()
         medicines = Medicine.objects.all()
+        if request.GET.get('search'):
+            search = request.GET.get('search')
+            print(search)
+            medicines = Medicine.objects.filter(name__contains=search)
+        medicines_count = medicines.count()
         order = get_object_or_404(Order, user=request.user,complete_order=False)
         items = order.orderitem_set.all()
         context = {
             'brands':brands,
             'generics':generics,
             'medicines':medicines,
+            'medicines_count':medicines_count,
             'order':order,
             'items':items
 
         }
         return render(request, "shop/home.html", context)
+   
 
 class UpdateItemView(View):
     def post(self, request):

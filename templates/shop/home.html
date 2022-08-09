@@ -35,14 +35,16 @@
                     <h2><i class="fa fa-file-o"></i> Medicine</h2>
                     <hr>
                     <!-- BEGIN SEARCH INPUT -->
-                    <div class="input-group">
-                      <input type="text" class="form-control">
-                      <span class="input-group-btn">
-                        <button class="btn btn-primary" type="button"><i class="fa fa-search"></i></button>
-                      </span>
-                    </div>
+                    <form method="get">
+                      <div class="input-group">
+                          <input type="text" name="search" class="form-control">
+                          <span class="input-group-btn">
+                            <input class="btn btn-primary" type="submit" value="Search">
+                          </span>
+                      </div>
+                    </form> 
                     <!-- END SEARCH INPUT -->
-                    <p>Search Result : 20</p>
+                    <p>Search Result : {{medicines_count}}</p>
                     
                     <div class="padding"></div>
                     
