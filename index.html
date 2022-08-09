@@ -9,7 +9,7 @@
 	<script src="https://netdna.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 </head>
 <body>
-<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
 <div class="container">
 <div class="row">
   <!-- BEGIN SEARCH RESULT -->
@@ -112,7 +112,68 @@
           <!-- END RESULT -->
           <div class="col-md-4">
             <h2><i class="fa fa-file-o"></i> Invoice </h2>
+            <table class="table table-cart table-mobile">
+              <thead>
+                <tr>
+                  <th>Product</th>
+                  <th>Price</th>
+                  <th>Quantity</th>
+                  <th>Total</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="product-col">
+                    <div class="product">
+                        <p>Napa</p>
+                    </div><!-- End .product -->
+                  </td>
+                  <td class="price-col">20</td>
+                  <td class="quantity-col">
+                      <div class="cart-product-quantity">
+                      <a style="font-weight: bold;" href="" class="update-cart mr-4" data-product = {{item.product.id}} data-action = "sub">-</a>
+                        5
+                      <a style="font-weight: bold;" href="" class="update-cart ml-4" data-product = {{item.product.id}} data-action = "add">+</a>
+                      </div><!-- End .cart-product-quantity -->
+                  </td>
+                  <td class="total-col">20</td>
+                  <td class="remove-col"><button class="btn-remove update-cart" data-product = {{item.product.id}} data-action = "del"><i class="fa fa-times-circle-o"></i></button></td>
+                </tr>
+                <tr>
+                  <td class="product-col">
+                    <div class="product">
+                        <p>Napa</p>
+                    </div><!-- End .product -->
+                  </td>
+                  <td class="price-col">20</td>
+                  <td class="quantity-col">
+                      <div class="cart-product-quantity">
+                      <a style="font-weight: bold;" href="" class="update-cart mr-4" data-product = {{item.product.id}} data-action = "sub">-</a>
+                        5
+                      <a style="font-weight: bold;" href="" class="update-cart ml-4" data-product = {{item.product.id}} data-action = "add">+</a>
+                      </div><!-- End .cart-product-quantity -->
+                  </td>
+                  <td class="total-col">20</td>
+                  <td class="remove-col"><button class="btn-remove update-cart" data-product = {{item.product.id}} data-action = "del"><i class="fa fa-times-circle-o"></i></button></td>
+                </tr>
+              </tbody>
+
+              <tbody>
                 
+                <tr>
+                  <td class="product-col">
+                    <div class="product">
+                        <p>Grand Total</p>
+                    </div><!-- End .product -->
+                  </td>
+                  <td class="total-col"></td>
+                  <td class="total-col"></td>
+                  <td class="total-col">20</td>
+                </tr>
+              </tbody>
+            </table><!-- End .table table-wishlist -->
+            <input type="button" id="bt" onclick="printDiv('printableArea')" value="Invoice Print " />
           </div>
         </div>
         </div>
@@ -120,6 +181,55 @@
     </div>
   </div>
   <!-- END SEARCH RESULT -->
+</div>
+
+<div id="printableArea" class="col-md-4" style="visibility: hidden">
+  <h2 style="text-align: center;"> Sabbir Medicine Shop </h2>
+  <h3> Invoice No : 123 </h3>
+  <table class="table table-cart table-mobile">
+    <thead>
+      <tr>
+        <th>Product</th>
+        <th>Price</th>
+        <th>Quantity</th>
+        <th>Total</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="product-col">
+          <div class="product">
+              <p>Napa</p>
+          </div><!-- End .product -->
+        </td>
+        <td class="price-col">20</td>
+        <td class="quantity-col">5</td>
+        <td class="total-col">20</td>
+      </tr>
+      <tr>
+        <td class="product-col">
+          <div class="product">
+              <p>Napa</p>
+          </div><!-- End .product -->
+        </td>
+        <td class="price-col">20</td>
+        <td class="quantity-col">5</td>
+        <td class="total-col">20</td>
+      </tr>
+    </tbody>
+    <tbody>
+      <tr>
+        <td class="product-col">
+          <div class="product">
+              <p>Grand Total</p>
+          </div><!-- End .product -->
+        </td>
+        <td class="total-col"></td>
+        <td class="total-col"></td>
+        <td class="total-col">20</td>
+      </tr>
+    </tbody>
+  </table><!-- End .table table-wishlist -->
 </div>
 
 <style type="text/css">
@@ -192,6 +302,13 @@ background:#eee;
 </style>
 
 <script type="text/javascript">
+  function printDiv(divName) {
+    var printContents = document.getElementById(divName).innerHTML;
+    var originalContents = document.body.innerHTML;
+    document.body.innerHTML = printContents;
+    window.print();
+    document.body.innerHTML = originalContents;
+}
 
 </script>
 </body>
