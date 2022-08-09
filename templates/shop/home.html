@@ -55,8 +55,9 @@
                           <td class="product"><strong>{{medicine.name}}</strong> ({{medicine.type}})<br>{{medicine.generic}}</td>
                           <td class="rate text-right">{{medicine.quantity}}</td>
                           <td class="rate text-right">${{medicine.sell_price}}</td>
-                          <td class="price text-right"><i class="fa fa-cart-plus" aria-hidden="true"></i>                  </td>                
-                        </tr>
+                          <td class="price text-right">
+                            <a style="font-weight: bold;" href="" class="update-cart ml-4" data-user = {{user.id}} data-product = {{medicine.id}} data-action = "add"><i class="fa fa-cart-plus" aria-hidden="true"></i></a></td>                
+                          </tr>
                         {% endfor %}
 
                       </tbody></table>
@@ -89,40 +90,26 @@
                         </tr>
                       </thead>
                       <tbody>
+                        {% for item in items %}
                         <tr>
                           <td class="product-col">
                             <div class="product">
-                                <p>Napa</p>
+                                <p>{{item.product.name}}</p>
                             </div><!-- End .product -->
                           </td>
-                          <td class="price-col">20</td>
+                          <td class="price-col">{{item.product.sell_price}}</td>
                           <td class="quantity-col">
                               <div class="cart-product-quantity">
-                              <a style="font-weight: bold;" href="" class="update-cart mr-4" data-product = {{item.product.id}} data-action = "sub">-</a>
-                                5
-                              <a style="font-weight: bold;" href="" class="update-cart ml-4" data-product = {{item.product.id}} data-action = "add">+</a>
+                              <a style="font-weight: bold;" href="" class="update-cart mr-4" data-user = {{user.id}} data-product = {{item.product.id}} data-action = "sub">-</a>
+                              {{item.quantity}}
+                              <a style="font-weight: bold;" href="" class="update-cart ml-4" data-user = {{user.id}} data-product = {{item.product.id}} data-action = "add">+</a>
                               </div><!-- End .cart-product-quantity -->
                           </td>
-                          <td class="total-col">20</td>
-                          <td class="remove-col"><button class="btn-remove update-cart" data-product = {{item.product.id}} data-action = "del"><i class="fa fa-times-circle-o"></i></button></td>
+                          <td class="total-col">{{item.get_total}}</td>
+                          <td class="remove-col"><button class="btn-remove update-cart" data-user = {{user.id}} data-product = {{item.product.id}} data-action = "del"><i class="fa fa-times-circle-o"></i></button></td>
                         </tr>
-                        <tr>
-                          <td class="product-col">
-                            <div class="product">
-                                <p>Napa</p>
-                            </div><!-- End .product -->
-                          </td>
-                          <td class="price-col">20</td>
-                          <td class="quantity-col">
-                              <div class="cart-product-quantity">
-                              <a style="font-weight: bold;" href="" class="update-cart mr-4" data-product = {{item.product.id}} data-action = "sub">-</a>
-                                5
-                              <a style="font-weight: bold;" href="" class="update-cart ml-4" data-product = {{item.product.id}} data-action = "add">+</a>
-                              </div><!-- End .cart-product-quantity -->
-                          </td>
-                          <td class="total-col">20</td>
-                          <td class="remove-col"><button class="btn-remove update-cart" data-product = {{item.product.id}} data-action = "del"><i class="fa fa-times-circle-o"></i></button></td>
-                        </tr>
+                        {% endfor %}
+                        
                       </tbody>
         
                       <tbody>
@@ -135,7 +122,7 @@
                           </td>
                           <td class="total-col"></td>
                           <td class="total-col"></td>
-                          <td class="total-col">20</td>
+                          <td class="total-col">{{order.get_cart_total}}</td>
                         </tr>
                       </tbody>
                     </table><!-- End .table table-wishlist -->
@@ -148,9 +135,10 @@
           </div>
           <!-- END SEARCH RESULT -->
         
+
         <div id="printableArea" class="col-md-4" style="visibility: hidden">
           <h2 style="text-align: center;"> Sabbir Medicine Shop </h2>
-          <h3> Invoice No : 123 </h3>
+          <h3> Invoice No : {{order.id}} </h3>
           <table class="table table-cart table-mobile">
             <thead>
               <tr>
@@ -161,26 +149,18 @@
               </tr>
             </thead>
             <tbody>
+              {% for item in items %}
               <tr>
                 <td class="product-col">
                   <div class="product">
-                      <p>Napa</p>
+                      <p>{{item.product.name}}</p>
                   </div><!-- End .product -->
                 </td>
-                <td class="price-col">20</td>
-                <td class="quantity-col">5</td>
-                <td class="total-col">20</td>
+                <td class="price-col">{{item.product.sell_price}}</td>
+                <td class="quantity-col">{{item.quantity}}</td>
+                <td class="total-col">{{item.get_total}}</td>
               </tr>
-              <tr>
-                <td class="product-col">
-                  <div class="product">
-                      <p>Napa</p>
-                  </div><!-- End .product -->
-                </td>
-                <td class="price-col">20</td>
-                <td class="quantity-col">5</td>
-                <td class="total-col">20</td>
-              </tr>
+              {% endfor %}
             </tbody>
             <tbody>
               <tr>
@@ -191,7 +171,7 @@
                 </td>
                 <td class="total-col"></td>
                 <td class="total-col"></td>
-                <td class="total-col">20</td>
+                <td class="total-col">{{order.get_cart_total}}</td>
               </tr>
             </tbody>
           </table><!-- End .table table-wishlist -->
