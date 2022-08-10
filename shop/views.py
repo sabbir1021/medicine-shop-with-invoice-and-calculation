@@ -5,8 +5,12 @@ from .models import Medicine, Brand , Generic ,Order, OrderItem
 from django.contrib import messages
 import json
 from django.http import JsonResponse
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
+
 # Create your views here.
 
+@method_decorator(login_required, name='dispatch')
 class HomeView(View):
     def get(self, request):
         brands = Brand.objects.all()
@@ -31,6 +35,7 @@ class HomeView(View):
         return render(request, "shop/home.html", context)
    
 
+@method_decorator(login_required, name='dispatch')
 class UpdateItemView(View):
     def post(self, request):
         print("-----------------------------")
