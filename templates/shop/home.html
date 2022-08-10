@@ -68,13 +68,21 @@
                     
                     <!-- BEGIN PAGINATION -->
                     <ul class="pagination">
-                      <li class="disabled"><a href="#">«</a></li>
-                      <li class="active"><a href="#">1</a></li>
-                      <li><a href="#">2</a></li>
-                      <li><a href="#">3</a></li>
-                      <li><a href="#">4</a></li>
-                      <li><a href="#">5</a></li>
-                      <li><a href="#">»</a></li>
+                      {% if medicines.has_previous %}
+                        <li><a href="?page={{ medicines.previous_page_number }}">«</a></li>
+                        <li><a href="?page={{ medicines.number|add:-1 }}">{{ medicines.number|add:-1 }}</a></li>
+                      {% else %}
+                        <li class="disabled"><a href="#">«</a></li>
+                      {% endif %}
+                      
+                      <li class="active"><a>{{ medicines.number }}</a></li>
+                      
+                      {% if medicines.has_next %}
+                        <li><a href="?page={{ medicines.number|add:1 }}">{{ medicines.number|add:1 }}</a></li>
+                        <li><a href="?page={{ medicines.next_page_number }}">»</a></li>
+                      {% else %}
+                        <li class="disabled"><a href="#">»</a></li>
+                      {% endif %}
                     </ul>
                     <!-- END PAGINATION -->
                   </div>

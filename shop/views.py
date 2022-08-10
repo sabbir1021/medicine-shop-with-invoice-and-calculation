@@ -7,6 +7,7 @@ import json
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
+from django.core.paginator import Paginator
 
 # Create your views here.
 
@@ -21,12 +22,15 @@ class HomeView(View):
             print(search)
             medicines = Medicine.objects.filter(name__contains=search)
         medicines_count = medicines.count()
+        paginator = Paginator(medicines, 1) # Show 25 contacts per page.
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
         order = get_object_or_404(Order, user=request.user,complete_order=False)
         items = order.orderitem_set.all()
         context = {
             'brands':brands,
             'generics':generics,
-            'medicines':medicines,
+            'medicines':page_obj,
             'medicines_count':medicines_count,
             'order':order,
             'items':items
