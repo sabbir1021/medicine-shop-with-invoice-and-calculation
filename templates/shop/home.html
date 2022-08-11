@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-
+{% load static %}
     {% block content %}
         <div class="row">
           <!-- BEGIN SEARCH RESULT -->
@@ -15,8 +15,8 @@
                     <!-- BEGIN FILTER BY CATEGORY -->
                     <h4>By Brand:</h4>
                     {% for brand in brands %}
-                    <div class="checkbox">
-                      <label><input type="checkbox" class="icheck"> {{brand.name}}</label>
+                    <div class="checkbox" id="filterForm" data-filter-url="{% url 'shop:ajax_load_filter' %}">
+                      <label><input name="foo[]" id="brand_check" type="checkbox" class="icheck" value="{{brand.name}}"> {{brand.name}}</label>
                     </div>
                     {% endfor %}
                     <!-- END FILTER BY CATEGORY -->
@@ -35,14 +35,14 @@
                     <h2><i class="fa fa-file-o"></i> Medicine</h2>
                     <hr>
                     <!-- BEGIN SEARCH INPUT -->
-                    <form method="get">
-                      <div class="input-group">
-                          <input type="text" name="search" class="form-control">
-                          <span class="input-group-btn">
-                            <input class="btn btn-primary" type="submit" value="Search">
-                          </span>
-                      </div>
-                    </form> 
+                    <div class="input-group" id="searchForm" data-search-url="{% url 'shop:ajax_load_search' %}">
+                        <input id="search" type="text" name="search" class="form-control">
+                        <span class="input-group-btn">
+                          <input class="btn btn-primary" type="submit" value="Search">
+                        </span>
+                    </div>
+
+                  <div id="search_result">
                     <!-- END SEARCH INPUT -->
                     <p>Search Result : {{medicines_count}}</p>
                     
@@ -67,25 +67,10 @@
                     <!-- END TABLE RESULT -->
                     
                     <!-- BEGIN PAGINATION -->
-                    <ul class="pagination">
-                      {% if medicines.has_previous %}
-                        <li><a href="?page={{ medicines.previous_page_number }}">«</a></li>
-                        <li><a href="?page={{ medicines.number|add:-1 }}">{{ medicines.number|add:-1 }}</a></li>
-                      {% else %}
-                        <li class="disabled"><a href="#">«</a></li>
-                      {% endif %}
-                      
-                      <li class="active"><a>{{ medicines.number }}</a></li>
-                      
-                      {% if medicines.has_next %}
-                        <li><a href="?page={{ medicines.number|add:1 }}">{{ medicines.number|add:1 }}</a></li>
-                        <li><a href="?page={{ medicines.next_page_number }}">»</a></li>
-                      {% else %}
-                        <li class="disabled"><a href="#">»</a></li>
-                      {% endif %}
-                    </ul>
+                    {% include 'pagination.html' %}
                     <!-- END PAGINATION -->
                   </div>
+                </div>
                   <!-- END RESULT -->
                   <div class="col-md-4">
                     <h2><i class="fa fa-file-o"></i> Invoice </h2>
@@ -264,7 +249,46 @@
             window.print();
             document.body.innerHTML = originalContents;
         }
-        
         </script>
+        <script src="{% static '3.3.1main.js' %}"></script>
+        <script>
+            $("#search").keyup(function () {
+                const url = $("#searchForm").attr("data-search-url");  // get the url of the `load_cities` view
+                const countryId = $(this).val();  // get the selected country ID from the HTML input
+                console.log(countryId);
+                $.ajax({                       // initialize an AJAX request
+                    url: url,                    // set the url of the request (= /persons/ajax/load-cities/ )
+                    data: {
+                        'country_id': countryId       // add the country id to the GET parameters
+                    },
+                    success: function (data) {   // `data` is the return of the `load_cities` view function
+                      console.log(data);
+                      $("#search_result").html(data);  // replace the contents of the city input with the data that came from the server
+                    }
+                });
+            });
+        </script>
+        <script>
+          $("input:checkbox[name^='foo']").click(function () {
+            var arr = [];
+            $("input:checkbox[name^='foo']").each(function () {
+                if ($(this).is(":checked")) {
+                    arr.push($(this).val());
+                }
+            });
+            console.log(arr)
+            const url = $("#filterForm").attr("data-filter-url");
+            $.ajax({
+              url: url,
+              data: JSON.stringify(arr),
+              success: function (data) {
+                console.log(data);
+                $("#search_result").html(data);
+              }
+          });
+        });
+        
+          
+      </script>
 
     {% endblock content %}

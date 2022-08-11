@@ -22,7 +22,7 @@ class HomeView(View):
             print(search)
             medicines = Medicine.objects.filter(name__contains=search)
         medicines_count = medicines.count()
-        paginator = Paginator(medicines, 1) # Show 25 contacts per page.
+        paginator = Paginator(medicines, 10) # Show 25 contacts per page.
         page_number = request.GET.get('page')
         page_obj = paginator.get_page(page_number)
         order = get_object_or_404(Order, user=request.user,complete_order=False)
@@ -70,3 +70,25 @@ class UpdateItemView(View):
         if orderitem.quantity <=0:
             orderitem.delete()
         return JsonResponse('item' , safe=False)
+
+def load_search(request):
+    country_id = request.GET.get('country_id')
+    print(country_id)
+    medicines = Medicine.objects.filter(name__contains=country_id)
+    medicines_count = medicines.count()
+    paginator = Paginator(medicines, 10) # Show 25 contacts per page.
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    return render(request, 'search.html', {'medicines':page_obj,'medicines_count':medicines_count})
+
+def load_filter(request):
+    country_id = request.GET
+
+    print('----------------------',country_id)
+
+    medicines = Medicine.objects.all()
+    medicines_count = medicines.count()
+    paginator = Paginator(medicines, 10) # Show 25 contacts per page.
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    return render(request, 'search.html', {'medicines':page_obj,'medicines_count':medicines_count})

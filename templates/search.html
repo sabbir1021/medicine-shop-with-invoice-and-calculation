@@ -1,0 +1,27 @@
+    <!-- END SEARCH INPUT -->
+    <p>Search Result : {{medicines_count}}</p>
+    
+    <div class="padding"></div>
+    
+    <!-- BEGIN TABLE RESULT -->
+    <div class="table-responsive">
+      <table class="table table-hover">
+        <tbody>
+        {% for medicine in medicines %}
+        <tr>
+          <td class="product"><strong>{{medicine.name}}</strong> ({{medicine.type}})<br>{{medicine.generic}}</td>
+          <td class="rate text-right">{{medicine.quantity}}</td>
+          <td class="rate text-right">${{medicine.sell_price}}</td>
+          <td class="price text-right">
+            <a style="font-weight: bold;" href="" class="update-cart ml-4" data-user = {{user.id}} data-product = {{medicine.id}} data-action = "add"><i class="fa fa-cart-plus" aria-hidden="true"></i></a></td>                
+          </tr>
+        {% endfor %}
+
+      </tbody></table>
+    </div>
+    <!-- END TABLE RESULT -->
+    
+    <!-- BEGIN PAGINATION -->
+    {% include 'pagination.html' %}
+    <!-- END PAGINATION -->
+  </div>
