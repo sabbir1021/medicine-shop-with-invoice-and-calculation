@@ -15,8 +15,8 @@
                     <!-- BEGIN FILTER BY CATEGORY -->
                     <h4>By Brand:</h4>
                     {% for brand in brands %}
-                    <div class="checkbox" id="filterForm" data-filter-url="{% url 'shop:ajax_load_filter' %}">
-                      <label><input name="foo[]" id="brand_check" type="checkbox" class="icheck" value="{{brand.name}}"> {{brand.name}}</label>
+                    <div class="checkbox" id="brandfilterForm" data-brand-filter-url="{% url 'shop:ajax_load_brand_filter' %}">
+                      <label><input name="brand[]" type="checkbox" class="icheck" value="{{brand.name}}"> {{brand.name}}</label>
                     </div>
                     {% endfor %}
                     <!-- END FILTER BY CATEGORY -->
@@ -24,7 +24,7 @@
                     <h4>By Generic:</h4>
                     {% for generic in generics %}
                     <div class="checkbox">
-                      <label><input type="checkbox" class="icheck"> {{generic.name}}</label>
+                      <label><input name="generic[]" type="checkbox" class="icheck" value="{{generic.name}}"> {{generic.name}}</label>
                     </div>
                     {% endfor %}
                     <!-- END FILTER BY CATEGORY -->
@@ -262,33 +262,38 @@
                         'country_id': countryId       // add the country id to the GET parameters
                     },
                     success: function (data) {   // `data` is the return of the `load_cities` view function
-                      console.log(data);
                       $("#search_result").html(data);  // replace the contents of the city input with the data that came from the server
                     }
                 });
             });
         </script>
         <script>
-          $("input:checkbox[name^='foo']").click(function () {
-            var arr = [];
-            $("input:checkbox[name^='foo']").each(function () {
+          $("input:checkbox").click(function () {
+            var brand_list=[];
+            var generic_list = [];
+            $("input:checkbox[name^='brand']").each(function () {
                 if ($(this).is(":checked")) {
-                    arr.push($(this).val());
+                    console.log($(this).val())
+                    brand_list.push($(this).val());
                 }
             });
-            console.log(arr)
-            const url = $("#filterForm").attr("data-filter-url");
+            $("input:checkbox[name^='generic']").each(function () {
+              if ($(this).is(":checked")) {
+                  console.log($(this).val())
+                  generic_list.push($(this).val());
+              }
+          });
+          console.log(brand_list)
+          console.log(generic_list)
+            const url = $("#brandfilterForm").attr("data-brand-filter-url");
             $.ajax({
               url: url,
-              data: JSON.stringify(arr),
+              data: {'brand_list':brand_list, 'generic_list': generic_list},
               success: function (data) {
-                console.log(data);
                 $("#search_result").html(data);
               }
           });
         });
-        
-          
       </script>
 
     {% endblock content %}

@@ -81,12 +81,17 @@ def load_search(request):
     page_obj = paginator.get_page(page_number)
     return render(request, 'search.html', {'medicines':page_obj,'medicines_count':medicines_count})
 
-def load_filter(request):
-    country_id = request.GET
-
-    print('----------------------',country_id)
-
+def load_brand_filter(request):
+    brand_list = request.GET.getlist('brand_list[]')
+    generic_list = request.GET.getlist('generic_list[]')
     medicines = Medicine.objects.all()
+    if brand_list and generic_list:
+        medicines = Medicine.objects.filter(brand__name__in = brand_list, generic__name__in = generic_list)
+    if brand_list:
+        medicines = Medicine.objects.filter(brand__name__in = brand_list)
+    if generic_list:
+        print("--------------")
+        medicines = Medicine.objects.filter(generic__name__in = generic_list)
     medicines_count = medicines.count()
     paginator = Paginator(medicines, 10) # Show 25 contacts per page.
     page_number = request.GET.get('page')
