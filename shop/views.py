@@ -104,4 +104,11 @@ def confirm_order(request):
     order = Order.objects.get(id=orderId)
     order.complete_order = True
     order.save()
+    items = order.orderitem_set.all()
+    for i in items:
+        print(i.product.id, i.quantity)
+        medicine = Medicine.objects.get(id=i.product.id)
+        medicine.quantity = medicine.quantity - i.quantity
+        medicine.save()
+
     return HttpResponse("ok")

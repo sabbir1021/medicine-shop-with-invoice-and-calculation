@@ -44,17 +44,22 @@
 
 <script type="text/javascript">
   function show_alert(){
-    alert("are you confirm");
-    console.log($("#bt").attr("order-data"));
-    $.ajax({
-      url: 'confirm-order/',
-      type: "POST",
-      headers: {'X-CSRFToken': '{{ csrf_token }}'},
-      data: {
-          'order_id': $("#bt").attr("order-data")
-      }
-  });
-  printDiv('printableArea');
+    if (confirm("are you confirm!") == true) {
+      console.log($("#bt").attr("order-data"));
+        $.ajax({
+          url: 'confirm-order/',
+          type: "POST",
+          headers: {'X-CSRFToken': '{{ csrf_token }}'},
+          data: {
+              'order_id': $("#bt").attr("order-data")
+          }
+          });
+        printDiv('printableArea');
+    } else {
+      text = "You canceled!";
+    }
+
+    
     
   };
     function printDiv(divName) {
