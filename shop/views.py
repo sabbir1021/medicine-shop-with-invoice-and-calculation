@@ -1,3 +1,5 @@
+from ast import Or
+from multiprocessing import context
 from django.shortcuts import render, get_object_or_404 , HttpResponse
 from django.views import View 
 from .models import Medicine, Brand , Generic ,Order, OrderItem
@@ -112,3 +114,25 @@ def confirm_order(request):
         medicine.save()
 
     return HttpResponse("ok")
+
+
+import datetime
+def report_generate(request):
+    orders = Order.objects.filter(updated_at=datetime.date.today(), complete_order=True)
+    total_sell = 0
+    total_profit = 0
+    for i in orders:
+        total_sell = total_sell + i.get_cart_total
+        total_profit = total_profit + i.get_profit_total
+    
+    print(total_sell)
+    print(total_profit)
+    print(orders.count())
+    context = {
+        'total_orders': orders.count(),
+        'total_sell' : total_sell,
+        'total_profit': total_profit
+
+    }
+
+    return render(request, 'shop/report.html', context)

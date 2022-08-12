@@ -35,8 +35,8 @@ class Medicine(models.Model):
 class Order(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     complete_order = models.BooleanField()
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    created_at = models.DateField(auto_now_add=True)
+    updated_at = models.DateField(auto_now=True)
     class Meta:
             verbose_name = 'Orders'
             verbose_name_plural = '1. Orders'
@@ -48,6 +48,11 @@ class Order(models.Model):
     def get_cart_total(self):
         items = self.orderitem_set.all()
         return sum(i.get_total for i in items)
+
+    @property
+    def get_profit_total(self):
+        items = self.orderitem_set.all()
+        return sum(i.get_total_profit for i in items)
 
 
 class OrderItem(models.Model):
@@ -65,3 +70,7 @@ class OrderItem(models.Model):
     @property
     def get_total(self):
         return self.product.sell_price  * self.quantity
+    
+    @property
+    def get_total_profit(self):
+        return (self.product.sell_price - self.product.buy_price)  * self.quantity

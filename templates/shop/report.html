@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% load static %}
+    {% block content %}
+    <div class="jumbotron">
+        <div class="row w-100">
+                <div class="col-md-4">
+                    <div class="card border-info mx-sm-1 p-3">
+                        <div class="text-info text-center mt-3"><h4>Total Sell</h4></div>
+                        <div class="text-info text-center mt-2"><h1>{{total_sell}}</h1></div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card border-success mx-sm-1 p-3">
+                        <div class="text-success text-center mt-3"><h4>Total Profit</h4></div>
+                        <div class="text-success text-center mt-2"><h1>{{total_profit}}</h1></div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card border-danger mx-sm-1 p-3">
+                        <div class="text-danger text-center mt-3"><h4>Total Orders</h4></div>
+                        <div class="text-danger text-center mt-2"><h1>{{total_orders}}</h1></div>
+                    </div>
+                </div>
+             </div>
+        </div>
+        
+    {% include 'partials/css.html' %}
+
+
+{% endblock content %}
