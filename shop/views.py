@@ -90,4 +90,4 @@ def load_search_and_filter(request):
     paginator = Paginator(medicines, 10) # Show 25 contacts per page.
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
-    return render(request, 'search.html', {'medicines':page_obj,'medicines_count':medicines_count})
+    return render(request, 'partials/search.html', {'medicines':page_obj,'medicines_count':medicines_count})

@@ -1,0 +1,78 @@
+{% load static %}
+<script type="text/javascript">
+    function printDiv(divName) {
+      var printContents = document.getElementById(divName).innerHTML;
+      var originalContents = document.body.innerHTML;
+      document.body.innerHTML = printContents;
+      window.print();
+      document.body.innerHTML = originalContents;
+  }
+  </script>
+  <script src="{% static '3.3.1main.js' %}"></script>
+  <script>
+      $("#search").keyup(function () {
+          const url = $("#brandfilterForm").attr("data-brand-filter-url");
+          const search_value = $(this).val();
+          console.log(search_value);
+          var brand_list=[];
+          var generic_list = [];
+          $("input:checkbox[name^='brand']").each(function () {
+              if ($(this).is(":checked")) {
+                  console.log($(this).val())
+                  brand_list.push($(this).val());
+              }
+          });
+          $("input:checkbox[name^='generic']").each(function () {
+            if ($(this).is(":checked")) {
+                console.log($(this).val())
+                generic_list.push($(this).val());
+            }
+        });
+        console.log(brand_list)
+        console.log(generic_list)
+          $.ajax({
+              url: url,
+              data: {
+                  'search_value': search_value,
+                  'brand_list':brand_list, 
+                  'generic_list': generic_list
+              },
+              success: function (data) {
+                $("#search_result").html(data);
+              }
+          });
+      });
+  </script>
+  <script>
+    $("input:checkbox").click(function () {
+      var brand_list=[];
+      var generic_list = [];
+      var search_value = document.getElementById("search").value;
+      $("input:checkbox[name^='brand']").each(function () {
+          if ($(this).is(":checked")) {
+              console.log($(this).val())
+              brand_list.push($(this).val());
+          }
+      });
+      $("input:checkbox[name^='generic']").each(function () {
+        if ($(this).is(":checked")) {
+            console.log($(this).val())
+            generic_list.push($(this).val());
+        }
+    });
+    console.log(brand_list)
+    console.log(generic_list)
+      const url = $("#brandfilterForm").attr("data-brand-filter-url");
+      $.ajax({
+        url: url,
+        data: {
+          'brand_list':brand_list, 
+          'generic_list': generic_list,
+          'search_value': search_value,
+        },
+        success: function (data) {
+          $("#search_result").html(data);
+        }
+    });
+  });
+</script>
