@@ -71,27 +71,21 @@ class UpdateItemView(View):
             orderitem.delete()
         return JsonResponse('item' , safe=False)
 
-def load_search(request):
-    country_id = request.GET.get('country_id')
-    print(country_id)
-    medicines = Medicine.objects.filter(name__contains=country_id)
-    medicines_count = medicines.count()
-    paginator = Paginator(medicines, 10) # Show 25 contacts per page.
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
-    return render(request, 'search.html', {'medicines':page_obj,'medicines_count':medicines_count})
 
-def load_brand_filter(request):
+def load_search_and_filter(request):
     brand_list = request.GET.getlist('brand_list[]')
     generic_list = request.GET.getlist('generic_list[]')
+    search_value = request.GET.get('search_value')
+    print(search_value, brand_list, generic_list)
     medicines = Medicine.objects.all()
     if brand_list and generic_list:
-        medicines = Medicine.objects.filter(brand__name__in = brand_list, generic__name__in = generic_list)
+        medicines = Medicine.objects.filter(name__contains=search_value,brand__name__in = brand_list, generic__name__in = generic_list)
     if brand_list:
-        medicines = Medicine.objects.filter(brand__name__in = brand_list)
+        medicines = Medicine.objects.filter(name__contains=search_value,brand__name__in = brand_list)
     if generic_list:
-        print("--------------")
-        medicines = Medicine.objects.filter(generic__name__in = generic_list)
+        medicines = Medicine.objects.filter(name__contains=search_value,generic__name__in = generic_list)
+    if search_value:
+        medicines = Medicine.objects.filter(name__contains=search_value)
     medicines_count = medicines.count()
     paginator = Paginator(medicines, 10) # Show 25 contacts per page.
     page_number = request.GET.get('page')

@@ -15,7 +15,7 @@
                     <!-- BEGIN FILTER BY CATEGORY -->
                     <h4>By Brand:</h4>
                     {% for brand in brands %}
-                    <div class="checkbox" id="brandfilterForm" data-brand-filter-url="{% url 'shop:ajax_load_brand_filter' %}">
+                    <div class="checkbox" id="brandfilterForm" data-brand-filter-url="{% url 'shop:ajax_load_search_and_filter' %}">
                       <label><input name="brand[]" type="checkbox" class="icheck" value="{{brand.name}}"> {{brand.name}}</label>
                     </div>
                     {% endfor %}
@@ -35,7 +35,7 @@
                     <h2><i class="fa fa-file-o"></i> Medicine</h2>
                     <hr>
                     <!-- BEGIN SEARCH INPUT -->
-                    <div class="input-group" id="searchForm" data-search-url="{% url 'shop:ajax_load_search' %}">
+                    <div class="input-group" id="searchForm" data-search-url="{% url 'shop:ajax_load_search_and_filter' %}">
                         <input id="search" type="text" name="search" class="form-control">
                         <span class="input-group-btn">
                           <input class="btn btn-primary" type="submit" value="Search">
@@ -252,13 +252,31 @@
         <script src="{% static '3.3.1main.js' %}"></script>
         <script>
             $("#search").keyup(function () {
-                const url = $("#searchForm").attr("data-search-url");
-                const countryId = $(this).val();
-                console.log(countryId);
+                const url = $("#brandfilterForm").attr("data-brand-filter-url");
+                const search_value = $(this).val();
+                console.log(search_value);
+                var brand_list=[];
+                var generic_list = [];
+                $("input:checkbox[name^='brand']").each(function () {
+                    if ($(this).is(":checked")) {
+                        console.log($(this).val())
+                        brand_list.push($(this).val());
+                    }
+                });
+                $("input:checkbox[name^='generic']").each(function () {
+                  if ($(this).is(":checked")) {
+                      console.log($(this).val())
+                      generic_list.push($(this).val());
+                  }
+              });
+              console.log(brand_list)
+              console.log(generic_list)
                 $.ajax({
                     url: url,
                     data: {
-                        'country_id': countryId
+                        'search_value': search_value,
+                        'brand_list':brand_list, 
+                        'generic_list': generic_list
                     },
                     success: function (data) {
                       $("#search_result").html(data);
@@ -270,6 +288,7 @@
           $("input:checkbox").click(function () {
             var brand_list=[];
             var generic_list = [];
+            var search_value = document.getElementById("search").value;
             $("input:checkbox[name^='brand']").each(function () {
                 if ($(this).is(":checked")) {
                     console.log($(this).val())
@@ -287,7 +306,11 @@
             const url = $("#brandfilterForm").attr("data-brand-filter-url");
             $.ajax({
               url: url,
-              data: {'brand_list':brand_list, 'generic_list': generic_list},
+              data: {
+                'brand_list':brand_list, 
+                'generic_list': generic_list,
+                'search_value': search_value,
+              },
               success: function (data) {
                 $("#search_result").html(data);
               }
