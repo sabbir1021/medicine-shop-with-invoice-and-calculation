@@ -13,7 +13,7 @@
           <td class="rate text-right">{{medicine.quantity}}</td>
           <td class="rate text-right">${{medicine.sell_price}}</td>
           <td class="price text-right">
-            <a style="font-weight: bold;" href="" class="update-cart ml-4" data-user = {{user.id}} data-product = {{medicine.id}} data-action = "add"><i class="fa fa-cart-plus" aria-hidden="true"></i></a></td>                
+            <a style="font-weight: bold;" id="updateCart" name="cart[]" data-update-cart-url="{% url 'shop:update_item' %}" class="ml-4" data-product={{medicine.id}} data-action="add"><i class="fa fa-cart-plus" aria-hidden="true"></i></a></td>                
           </tr>
         {% endfor %}
 
@@ -24,4 +24,24 @@
     <!-- BEGIN PAGINATION -->
     {% include 'partials/pagination.html' %}
     <!-- END PAGINATION -->
+    <script type="text/javascript">
+      $("#updateCart[name^='cart']").click(function () {
+        const url = $("#updateCart").attr("data-update-cart-url");
+        const product_id = $(this).attr("data-product");
+        const action = $(this).attr("data-action");
+        console.log(url, product_id, action)
+        $.ajax({
+          url: url,
+          type: "POST",
+          headers: {'X-CSRFToken': '{{ csrf_token }}'},
+          data: {
+              'product_id': product_id,
+              'action': action,
+          },
+          success: function (data) {
+            $("#cart_result").html(data);
+          }
+        });
+      });
+    </script>
   </div>

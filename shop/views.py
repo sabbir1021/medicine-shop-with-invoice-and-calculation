@@ -1,5 +1,4 @@
-from multiprocessing import context
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404 , HttpResponse
 from django.views import View 
 from .models import Medicine, Brand , Generic ,Order, OrderItem
 from django.contrib import messages
@@ -17,16 +16,16 @@ class HomeView(View):
         brands = Brand.objects.all()
         generics = Generic.objects.all()
         medicines = Medicine.objects.all()
-        if request.GET.get('search'):
-            search = request.GET.get('search')
-            print(search)
-            medicines = Medicine.objects.filter(name__contains=search)
         medicines_count = medicines.count()
         paginator = Paginator(medicines, 10) # Show 25 contacts per page.
         page_number = request.GET.get('page')
         page_obj = paginator.get_page(page_number)
-        order = get_object_or_404(Order, user=request.user,complete_order=False)
-        items = order.orderitem_set.all()
+        try:
+            order = get_object_or_404(Order, user=request.user,complete_order=False)
+            items = order.orderitem_set.all() or None
+        except:
+            order = None
+            items = None
         context = {
             'brands':brands,
             'generics':generics,
@@ -43,14 +42,11 @@ class HomeView(View):
 class UpdateItemView(View):
     def post(self, request):
         print("-----------------------------")
-        
-        data = json.loads(request.body)
-        print(data['productId'], data['action'])
-        productId = data['productId']
-        action = data['action']
+        productId = request.POST.get('product_id')
+        action = request.POST.get('action')
+        print(productId, action)
         user = request.user
         product = Medicine.objects.get(id=productId)
-        
         order, created = Order.objects.get_or_create(user=user,complete_order=False)
         orderitem, created = OrderItem.objects.get_or_create(order=order, product=product)
         
@@ -69,7 +65,16 @@ class UpdateItemView(View):
         
         if orderitem.quantity <=0:
             orderitem.delete()
-        return JsonResponse('item' , safe=False)
+
+        order = get_object_or_404(Order, user=request.user,complete_order=False)
+        items = order.orderitem_set.all()
+        context = {
+            'order':order,
+            'items':items
+
+        }
+        return render(request, "partials/cart_result.html", context)
+        # return JsonResponse('item' , safe=False)
 
 
 def load_search_and_filter(request):
@@ -91,3 +96,12 @@ def load_search_and_filter(request):
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     return render(request, 'partials/search.html', {'medicines':page_obj,'medicines_count':medicines_count})
+
+
+def confirm_order(request):
+    orderId = request.POST.get('order_id')
+    print(orderId)
+    order = Order.objects.get(id=orderId)
+    order.complete_order = True
+    order.save()
+    return HttpResponse("ok")

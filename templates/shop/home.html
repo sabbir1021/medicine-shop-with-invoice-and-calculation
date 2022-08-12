@@ -58,7 +58,7 @@
                           <td class="rate text-right">{{medicine.quantity}}</td>
                           <td class="rate text-right">${{medicine.sell_price}}</td>
                           <td class="price text-right">
-                            <a style="font-weight: bold;" href="" class="update-cart ml-4" data-user = {{user.id}} data-product = {{medicine.id}} data-action = "add"><i class="fa fa-cart-plus" aria-hidden="true"></i></a></td>                
+                            <a style="font-weight: bold;" id="updateCart" name="cart[]" data-update-cart-url="{% url 'shop:update_item' %}" class="ml-4" data-product={{medicine.id}} data-action="add"><i class="fa fa-cart-plus" aria-hidden="true"></i></a></td>                
                           </tr>
                         {% endfor %}
 
@@ -72,6 +72,7 @@
                   </div>
                 </div>
                   <!-- END RESULT -->
+                  <div id="cart_result">
                   <div class="col-md-4">
                     <h2><i class="fa fa-file-o"></i> Invoice </h2>
                     <table class="table table-cart table-mobile">
@@ -84,6 +85,7 @@
                           <th></th>
                         </tr>
                       </thead>
+                     
                       <tbody>
                         {% for item in items %}
                         <tr>
@@ -95,13 +97,13 @@
                           <td class="price-col">{{item.product.sell_price}}</td>
                           <td class="quantity-col">
                               <div class="cart-product-quantity">
-                              <a style="font-weight: bold;" href="" class="update-cart mr-4" data-user = {{user.id}} data-product = {{item.product.id}} data-action = "sub">-</a>
+                              <a style="font-weight: bold;" class="mr-4" id="inupdateCart" name="incart[]" data-update-cart-url="{% url 'shop:update_item' %}" data-product = {{item.product.id}} data-action = "sub">-</a>
                               {{item.quantity}}
-                              <a style="font-weight: bold;" href="" class="update-cart ml-4" data-user = {{user.id}} data-product = {{item.product.id}} data-action = "add">+</a>
+                              <a style="font-weight: bold;" class="ml-4" id="inupdateCart" name="incart[]" data-update-cart-url="{% url 'shop:update_item' %}" data-product = {{item.product.id}} data-action = "add">+</a>
                               </div><!-- End .cart-product-quantity -->
                           </td>
                           <td class="total-col">{{item.get_total}}</td>
-                          <td class="remove-col"><button class="btn-remove update-cart" data-user = {{user.id}} data-product = {{item.product.id}} data-action = "del"><i class="fa fa-times-circle-o"></i></button></td>
+                          <td class="remove-col"><button class="btn-remove" id="inupdateCart" name="incart[]" data-update-cart-url="{% url 'shop:update_item' %}" data-product = {{item.product.id}} data-action = "del"><i class="fa fa-times-circle-o"></i></button></td>
                         </tr>
                         {% endfor %}
                         
@@ -121,56 +123,62 @@
                         </tr>
                       </tbody>
                     </table><!-- End .table table-wishlist -->
-                    <input type="button" id="bt" onclick="printDiv('printableArea')" value="Invoice Print " />
+                    {% if order %}
+                    <input type="button" id="bt" onclick="show_alert()" order-data={{order.id}} value="Invoice Print" />
+                    {% else %}
+                    <input type="button" value="Invoice Print" />
+                    {% endif %}
                   </div>
+                  
+                  <div id="printableArea" class="col-md-4" style="visibility: hidden">
+                    <h2 style="text-align: center;"> Sabbir Medicine Shop </h2>
+                    <h3> Invoice No : {{order.id}} </h3>
+                    <table class="table table-cart table-mobile">
+                      <thead>
+                        <tr>
+                          <th>Product</th>
+                          <th>Price</th>
+                          <th>Quantity</th>
+                          <th>Total</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {% for item in items %}
+                        <tr>
+                          <td class="product-col">
+                            <div class="product">
+                                <p>{{item.product.name}}</p>
+                            </div><!-- End .product -->
+                          </td>
+                          <td class="price-col">{{item.product.sell_price}}</td>
+                          <td class="quantity-col">{{item.quantity}}</td>
+                          <td class="total-col">{{item.get_total}}</td>
+                        </tr>
+                        {% endfor %}
+                      </tbody>
+                      <tbody>
+                        <tr>
+                          <td class="product-col">
+                            <div class="product">
+                                <p>Grand Total</p>
+                            </div><!-- End .product -->
+                          </td>
+                          <td class="total-col"></td>
+                          <td class="total-col"></td>
+                          <td class="total-col">{{order.get_cart_total}}</td>
+                        </tr>
+                      </tbody>
+                    </table><!-- End .table table-wishlist -->
+                  </div>
+
+
+                </div>
                 </div>
                 </div>
               </div>
             </div>
           </div>
           <!-- END SEARCH RESULT -->
-        
-
-        <div id="printableArea" class="col-md-4" style="visibility: hidden">
-          <h2 style="text-align: center;"> Sabbir Medicine Shop </h2>
-          <h3> Invoice No : {{order.id}} </h3>
-          <table class="table table-cart table-mobile">
-            <thead>
-              <tr>
-                <th>Product</th>
-                <th>Price</th>
-                <th>Quantity</th>
-                <th>Total</th>
-              </tr>
-            </thead>
-            <tbody>
-              {% for item in items %}
-              <tr>
-                <td class="product-col">
-                  <div class="product">
-                      <p>{{item.product.name}}</p>
-                  </div><!-- End .product -->
-                </td>
-                <td class="price-col">{{item.product.sell_price}}</td>
-                <td class="quantity-col">{{item.quantity}}</td>
-                <td class="total-col">{{item.get_total}}</td>
-              </tr>
-              {% endfor %}
-            </tbody>
-            <tbody>
-              <tr>
-                <td class="product-col">
-                  <div class="product">
-                      <p>Grand Total</p>
-                  </div><!-- End .product -->
-                </td>
-                <td class="total-col"></td>
-                <td class="total-col"></td>
-                <td class="total-col">{{order.get_cart_total}}</td>
-              </tr>
-            </tbody>
-          </table><!-- End .table table-wishlist -->
-        </div>
         
     {% include 'partials/css.html' %}
     {% include 'partials/js.html' %}

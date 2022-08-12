@@ -1,11 +1,69 @@
 {% load static %}
+
 <script type="text/javascript">
+  $("#updateCart[name^='cart']").click(function () {
+    const url = $("#updateCart").attr("data-update-cart-url");
+    const product_id = $(this).attr("data-product");
+    const action = $(this).attr("data-action");
+    console.log(url, product_id, action)
+    $.ajax({
+      url: url,
+      type: "POST",
+      headers: {'X-CSRFToken': '{{ csrf_token }}'},
+      data: {
+          'product_id': product_id,
+          'action': action,
+      },
+      success: function (data) {
+        $("#cart_result").html(data);
+      }
+    });
+  });
+</script>
+
+<script type="text/javascript">
+  $("#inupdateCart[name^='incart']").click(function () {
+    const url = $("#updateCart").attr("data-update-cart-url");
+    const product_id = $(this).attr("data-product");
+    const action = $(this).attr("data-action");
+    console.log(url, product_id, action)
+    $.ajax({
+      url: url,
+      type: "POST",
+      headers: {'X-CSRFToken': '{{ csrf_token }}'},
+      data: {
+          'product_id': product_id,
+          'action': action,
+      },
+      success: function (data) {
+        $("#cart_result").html(data);
+      }
+    });
+  });
+</script>
+
+<script type="text/javascript">
+  function show_alert(){
+    alert("are you confirm");
+    console.log($("#bt").attr("order-data"));
+    $.ajax({
+      url: 'confirm-order/',
+      type: "POST",
+      headers: {'X-CSRFToken': '{{ csrf_token }}'},
+      data: {
+          'order_id': $("#bt").attr("order-data")
+      }
+  });
+  printDiv('printableArea');
+    
+  };
     function printDiv(divName) {
       var printContents = document.getElementById(divName).innerHTML;
       var originalContents = document.body.innerHTML;
       document.body.innerHTML = printContents;
       window.print();
-      document.body.innerHTML = originalContents;
+      location.reload();
+      //document.body.innerHTML = originalContents;
   }
   </script>
   <script src="{% static '3.3.1main.js' %}"></script>
