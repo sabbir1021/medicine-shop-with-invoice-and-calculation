@@ -1,6 +1,16 @@
 from shop.models import Brand, Generic, Medicine, Place
 import random
 
+data = {
+    'Beximco Pharma' : {
+        'Aceclofenac':{
+            'A1':{
+                ["Flexi", 10, 12, "tablet", 10]
+            }
+        }
+    }
+}
+
 brands = {
     "Beximco Pharma",
     "ACI Limited",
