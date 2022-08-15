@@ -83,15 +83,14 @@ def load_search_and_filter(request):
     brand_list = request.GET.getlist('brand_list[]')
     generic_list = request.GET.getlist('generic_list[]')
     search_value = request.GET.get('search_value')
-    print(search_value, brand_list, generic_list)
     medicines = Medicine.objects.all()
     if brand_list and generic_list:
-        medicines = Medicine.objects.filter(name__contains=search_value,brand__name__in = brand_list, generic__name__in = generic_list)
-    if brand_list:
-        medicines = Medicine.objects.filter(name__contains=search_value,brand__name__in = brand_list)
-    if generic_list:
-        medicines = Medicine.objects.filter(name__contains=search_value,generic__name__in = generic_list)
-    if search_value:
+        medicines = Medicine.objects.filter(name__contains=search_value, brand__name__in = brand_list, generic__name__in = generic_list)
+    elif brand_list:
+        medicines = Medicine.objects.filter(name__contains=search_value, brand__name__in = brand_list)
+    elif generic_list:
+        medicines = Medicine.objects.filter(name__contains=search_value, generic__name__in = generic_list)
+    elif search_value:
         medicines = Medicine.objects.filter(name__contains=search_value)
     medicines_count = medicines.count()
     paginator = Paginator(medicines, 10) # Show 25 contacts per page.
@@ -118,21 +117,25 @@ def confirm_order(request):
 
 import datetime
 def report_generate(request):
-    orders = Order.objects.filter(updated_at=datetime.date.today(), complete_order=True)
+    from_date = request.GET.get("from_date")
+    to_date = request.GET.get("to_date")
+    if from_date and to_date:
+        orders = Order.objects.filter(updated_at__range=[from_date,to_date], complete_order=True)
+    else:
+        orders = Order.objects.filter(updated_at=datetime.date.today(), complete_order=True)
+    
     total_sell = 0
     total_profit = 0
     for i in orders:
         total_sell = total_sell + i.get_cart_total
         total_profit = total_profit + i.get_profit_total
-    
-    print(total_sell)
-    print(total_profit)
-    print(orders.count())
+
     context = {
         'total_orders': orders.count(),
         'total_sell' : total_sell,
-        'total_profit': total_profit
+        'total_profit': total_profit,
+        'from_date': from_date,
+        'to_date' : to_date
 
     }
-
     return render(request, 'shop/report.html', context)

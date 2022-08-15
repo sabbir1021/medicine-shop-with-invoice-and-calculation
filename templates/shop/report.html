@@ -1,28 +1,28 @@
 {% extends 'base.html' %}
 {% load static %}
     {% block content %}
-    <div class="container">
-        <br />
-        <div class="row">
-          <div class='col-sm-3'>
-            <div class="form-group">
-              <div id="filterDate2">
-                
-                <!-- Datepicker as text field -->         
-                <div class="input-group date" data-date-format="dd.mm.yyyy">
-                  <input  type="text" class="form-control" placeholder="dd.mm.yyyy">
-                  <div class="input-group-addon" >
-                    <span class="glyphicon glyphicon-th"></span>
-                  </div>
-                </div>
-                
-              </div>    
-            </div>
+    <form method="GET" action="{% url 'shop:report_generate' %}">
+      <div class="row" style="margin-bottom:20px">
+        <div class="col-xs-4 center-block" style="float:none">
+          <div class="col-md-6">
+            <label>From Date:</label>
+            <input class="form-control" type="date"  name="from_date" value="{{from_date}}" required>
+          </div>
+          <div class="col-md-6">
+            <label>To Date:</label>
+            <input class="form-control" type="date" name="to_date" value="{{to_date}}" required>
           </div>
         </div>
+        <input style="margin-top: 23px;" class="btn btn-primary" type="submit">
       </div>
-    <div class="jumbotron">
-        <div class="row w-100">
+    </form>
+
+    <div class="row">
+      <!-- BEGIN SEARCH RESULT -->
+      <div class="col-md-12">
+        <div class="grid search">
+          <div class="grid-body">
+            <div class="row">
                 <div class="col-md-4">
                     <div class="card border-info mx-sm-1 p-3">
                         <div class="text-info text-center mt-3"><h4>Total Sell</h4></div>
@@ -43,7 +43,9 @@
                 </div>
              </div>
         </div>
-        
+      </div>
+    </div>
+  </div>      
     {% include 'partials/css.html' %}
 <script>
     $('.input-group.date').datepicker({format: "dd.mm.yyyy"}); 
