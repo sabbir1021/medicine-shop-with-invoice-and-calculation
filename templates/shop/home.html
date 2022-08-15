@@ -32,7 +32,7 @@
                   <!-- END FILTERS -->
                   <!-- BEGIN RESULT -->
                   <div class="col-md-6">
-                    <h2><i class="fa fa-file-o"></i> Medicine</h2>
+                    <h2><i class="fa fa-medkit" aria-hidden="true"></i> Medicine</h2>
                     <hr>
                     <!-- BEGIN SEARCH INPUT -->
                     <div class="input-group" id="searchForm" data-search-url="{% url 'shop:ajax_load_search_and_filter' %}">
@@ -51,15 +51,26 @@
                     <!-- BEGIN TABLE RESULT -->
                     <div class="table-responsive">
                       <table class="table table-hover">
+                        <thead>
+                          <tr>
+                            <th>Medicine Name</th>
+                            <th class="rate text-center">Place</th>
+                            <th class="rate text-center">Quantity</th>
+                            <th class="rate text-center">Price</th>
+                            <th class="rate text-center">Action</th>
+            
+                          </tr>
+                        </thead>
                         <tbody>
                         {% for medicine in medicines %}
                         <tr>
                           <td class="product"><strong>{{medicine.name}}</strong> ({{medicine.type}})<br>{{medicine.generic}}</td>
-                          <td class="rate text-right">{{medicine.quantity}}</td>
-                          <td class="rate text-right">${{medicine.sell_price}}</td>
-                          <td class="price text-right">
+                          <td class="rate text-center">{{medicine.place}}</td>
+                          <td class="rate text-center">{{medicine.quantity}}</td>
+                          <td class="rate text-center">${{medicine.sell_price}}</td>
+                          <td class="price text-center">
                             <a style="font-weight: bold;" id="updateCart" name="cart[]" data-update-cart-url="{% url 'shop:update_item' %}" class="ml-4" data-product={{medicine.id}} data-action="add"><i class="fa fa-cart-plus" aria-hidden="true"></i></a></td>                
-                          </tr>
+                        </tr>
                         {% endfor %}
 
                       </tbody></table>
@@ -74,7 +85,8 @@
                   <!-- END RESULT -->
                   <div id="cart_result">
                   <div class="col-md-4">
-                    <h2><i class="fa fa-file-o"></i> Invoice </h2>
+                    <h2><i class="fa fa-file-pdf-o" aria-hidden="true"></i> Invoice </h2>
+                    <hr>
                     <table class="table table-cart table-mobile">
                       <thead>
                         <tr>
@@ -97,13 +109,13 @@
                           <td class="price-col">{{item.product.sell_price}}</td>
                           <td class="quantity-col">
                               <div class="cart-product-quantity">
-                              <a style="font-weight: bold;" class="mr-4" id="inupdateCart" name="incart[]" data-update-cart-url="{% url 'shop:update_item' %}" data-product = {{item.product.id}} data-action = "sub">-</a>
-                              {{item.quantity}}
-                              <a style="font-weight: bold;" class="ml-4" id="inupdateCart" name="incart[]" data-update-cart-url="{% url 'shop:update_item' %}" data-product = {{item.product.id}} data-action = "add">+</a>
+                              <a style="font-weight: bold;" class="mr-4" id="inupdateCart" name="incart[]" data-update-cart-url="{% url 'shop:update_item' %}" data-product = {{item.product.id}} data-action = "sub"><i class="fa fa-minus-circle" aria-hidden="true"></i></a>
+                              &nbsp; {{item.quantity}}  &nbsp;
+                              <a style="font-weight: bold;" class="ml-4" id="inupdateCart" name="incart[]" data-update-cart-url="{% url 'shop:update_item' %}" data-product = {{item.product.id}} data-action = "add"><i class="fa fa-plus-circle" aria-hidden="true"></i></a>
                               </div><!-- End .cart-product-quantity -->
                           </td>
                           <td class="total-col">{{item.get_total}}</td>
-                          <td class="remove-col"><button class="btn-remove" id="inupdateCart" name="incart[]" data-update-cart-url="{% url 'shop:update_item' %}" data-product = {{item.product.id}} data-action = "del"><i class="fa fa-times-circle-o"></i></button></td>
+                          <td class="remove-col"><a id="inupdateCart" name="incart[]" data-update-cart-url="{% url 'shop:update_item' %}" data-product = {{item.product.id}} data-action = "del"><i class="fa fa-trash" aria-hidden="true"></i></a></td>
                         </tr>
                         {% endfor %}
                         
@@ -124,9 +136,9 @@
                       </tbody>
                     </table><!-- End .table table-wishlist -->
                     {% if order %}
-                    <input type="button" id="bt" onclick="show_alert()" order-data={{order.id}} value="Invoice Print" />
+                    <input class="center-block btn btn-primary" type="button" id="bt" onclick="show_alert()" order-data={{order.id}} value="Invoice Print" />
                     {% else %}
-                    <input type="button" value="Invoice Print" />
+                    <input class="center-block" type="button" value="Invoice Print" />
                     {% endif %}
                   </div>
                   

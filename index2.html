@@ -50,7 +50,7 @@
             <hr>
             <h4>By Brand:</h4>
             <div class="form-check">
-              <label class="form-check-label">
+              <label class="form-check-label f-size">
                 <input type="checkbox" class="form-check-input" value=""> The ACME Laboratories Ltd
               </label>
             </div>
@@ -85,16 +85,11 @@
           <div class="col-md-6">
             <h2><i class="fa fa-file-o"></i> Medicine</h2>
             <hr>
-            <div class="input-group">
-              <input type="text" class="form-control">
-              <span class="input-group-btn">
-                <button class="btn btn-primary" type="button"><i class="fa fa-search"></i></button>
-              </span>
-            </div>
+            
             <div class="input-group mb-3">
               <input type="text" class="form-control" placeholder="Recipient's username" aria-label="Recipient's username" aria-describedby="basic-addon2">
               <div class="input-group-append">
-                <span class="input-group-text"><button class="" type="button"><i class="fa fa-search"></i></button></span>
+                <span class="input-group-btn"><input class="btn btn-primary" type="submit" value="Search"></span>
               </div>
             </div>
           </div>
@@ -111,6 +106,9 @@
     body{
     background:#eee;
     }
+    .h2, h2 {
+      font-size: 30px;
+  }
     .content {
       background:#fff;
       margin-right: 0px;
@@ -125,7 +123,10 @@
     margin-bottom: 25px;
     box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.1);
 }
- 
+ .f-size {
+  font-size: 0.9em;
+  line-height: 1.9em;
+ }
   </style>
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
