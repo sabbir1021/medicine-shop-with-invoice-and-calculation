@@ -85,13 +85,13 @@ def load_search_and_filter(request):
     search_value = request.GET.get('search_value')
     medicines = Medicine.objects.all()
     if brand_list and generic_list:
-        medicines = Medicine.objects.filter(name__contains=search_value, brand__name__in = brand_list, generic__name__in = generic_list)
+        medicines = Medicine.objects.filter(name__icontains=search_value, brand__name__in = brand_list, generic__name__in = generic_list)
     elif brand_list:
-        medicines = Medicine.objects.filter(name__contains=search_value, brand__name__in = brand_list)
+        medicines = Medicine.objects.filter(name__icontains=search_value, brand__name__in = brand_list)
     elif generic_list:
-        medicines = Medicine.objects.filter(name__contains=search_value, generic__name__in = generic_list)
+        medicines = Medicine.objects.filter(name__icontains=search_value, generic__name__in = generic_list)
     elif search_value:
-        medicines = Medicine.objects.filter(name__contains=search_value)
+        medicines = Medicine.objects.filter(name__icontains=search_value)
     medicines_count = medicines.count()
     paginator = Paginator(medicines, 10) # Show 25 contacts per page.
     page_number = request.GET.get('page')
