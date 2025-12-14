@@ -21,7 +21,7 @@ class RegisterView(generic.CreateView):
     form_class = RegisterForm
     def form_valid(self, form):
         user = form.save()
-        send_account_confirmation_email(self.request, user)
+        # send_account_confirmation_email(self.request, user)
         login(self.request, user)
         return super(RegisterView, self).form_valid(form)
     def get_success_url(self):

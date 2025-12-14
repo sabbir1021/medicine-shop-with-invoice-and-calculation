@@ -20,6 +20,6 @@ if settings.FORCE_STATIC_FILE_SERVING and not settings.DEBUG:
     settings.DEBUG = False
 
 
-admin.site.site_header = "Pet Care Admin"
-admin.site.site_title = "Pet Care Admin Portal"
-admin.site.index_title = "Pet Care Researcher Portal"
+admin.site.site_header = "Anika Medicine Shop Admin"
+admin.site.site_title = "Anika Medicine Shop Admin Portal"
+admin.site.index_title = "Anika Medicine Shop Researcher Portal"
