@@ -7,6 +7,7 @@ sudo apt upgrade -y
 <!-- Install Required Packages in ubuntu server -->
 sudo apt install nginx python3 python3-pip python3-venv -y
 
+<!-- clone github project -->
 
 <!-- create virtual environment inside  Django App project for run project-->
 python3 -m venv venv
@@ -25,14 +26,8 @@ pkill gunicorn
 sudo nano /etc/nginx/sites-available/os_lab.conf
 <!-- insert this code on os_lab.conf file -->
 server {
-    listen 3000;
-    server_name localhost 127.0.0.1;
-
-    location /static/ {
-        alias /home/sabbir/Desktop/Prova/os_project/static/;
-        autoindex on;
-    }
-
+    listen 80;
+    server_name app.dorjimahal.com;
     location / {
         proxy_pass http://127.0.0.1:8000;
         proxy_set_header Host $host;
@@ -55,15 +50,14 @@ sudo systemctl restart nginx
 <!-- Enable Firewall (ufw) -->
 sudo apt install ufw -y
 sudo ufw allow 'Nginx Full'
-sudo ufw allow OpenSSH ---local is not working
+sudo ufw allow OpenSSH
 sudo ufw enable
 
 <!-- Enable HTTPS (SSL/TLS) -->
 <!-- Install Certbot: -->
 sudo apt install certbot python3-certbot-nginx -y
 <!-- Issue SSL: -->
-sudo certbot --nginx -d http://127.0.0.1:3000 --local is not working
-
+sudo certbot --nginx -d app.dorjimahal.com 
 
 
 <!-- Step 10: Install fail2ban -->
