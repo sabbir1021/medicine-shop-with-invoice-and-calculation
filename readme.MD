@@ -7,6 +7,7 @@ sudo apt upgrade -y
 <!-- Install Required Packages in ubuntu server -->
 sudo apt install nginx python3 python3-pip python3-venv -y
 
+
 <!-- clone github project -->
 
 <!-- create virtual environment inside  Django App project for run project-->
@@ -16,7 +17,7 @@ source venv/bin/activate
 <!-- install  Django App dependency/package -->
 pip install -r requirements.txt
 
-<!-- run Django App with Gunicorn -->
+<!-- run Django App with Gunicorn -->127.0.0.1:8000
 gunicorn --workers 3 --bind 0.0.0.0:8000 myproject.wsgi:application -D
 pkill gunicorn 
 
